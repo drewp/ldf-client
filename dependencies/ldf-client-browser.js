@@ -2874,6 +2874,7 @@ Fragment.prototype.loadFromUrl = function (pageUrl) {
   var self = this, fragmentsClient = this._fragmentsClient, fragmentPage,
       headers = { 'user-agent': 'Triple Pattern Fragments Client' };
   if (fragmentsClient._startFragmentUrl) headers.referer = fragmentsClient._startFragmentUrl;
+  pageUrl = pageUrl.replace(/%3A/g, ':').replace(/%2F/g, '/');  
   fragmentPage = fragmentsClient._httpClient.get(pageUrl, headers);
   fragmentPage.on('error', function (error) { self.emit('error', error); });
 
