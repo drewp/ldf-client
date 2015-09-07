@@ -56,10 +56,10 @@ Element providing solution to no problem in particular.
       },
 
       attached: function() {
-        this.async(function() {
-         ldf.Logger.setLevel('warning');
-         this.executeQuery();
-        });
+        ldf.Logger.setLevel('warning');
+        if (this.auto) {
+          this.debounce('executeQuery', this.executeQuery, 10);
+        }
       },
 
       executeQuery: function() {
@@ -118,13 +118,13 @@ Element providing solution to no problem in particular.
 
       queryChanged: function() {
         if (this.auto) {
-          return this.executeQuery();
+          this.debounce('executeQuery', this.executeQuery, 10);
         }
       },
 
       startFragmentChanged: function() {
         if (this.auto) {
-          return this.executeQuery();
+          this.debounce('executeQuery', this.executeQuery, 10);
         }
       }
 
