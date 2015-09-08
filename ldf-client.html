@@ -52,6 +52,10 @@ Element providing solution to no problem in particular.
           type: Boolean,
           value: true
         },
+        output: {
+         type: Array,
+         notify: true,
+        },
         _results: {type: Object}
       },
 
@@ -81,11 +85,13 @@ Element providing solution to no problem in particular.
         var results = new ldf.SparqlIterator(this.query, {
           fragmentsClient: fragmentsClient,
         });
+        this.output = [];
 
         if (this.responseFormat === 'streaming') {
           // Partial response
           var data = '';
           results.on('data', function(chunk) {
+            that.push('output', that._plainObjectFromResultRow(chunk));
             chunk = JSON.stringify(chunk);
             data += chunk;
             that.fire('ldf-query-streaming-response-partial', {
@@ -102,6 +108,14 @@ Element providing solution to no problem in particular.
         }
       },
 
+      _plainObjectFromResultRow: function(row) {
+       var out = {};
+       for (k of Object.keys(row)) {
+         out[k] = row[k];
+       }
+       return out;
+      },
+     
       showNext: function() {
         var that = this;
         (function _showNext() {
